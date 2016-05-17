@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>OverheidioApi.Net</id>
+    <version>$version$</version>
+    <title>OverheidioApi.Net</title>
+    <authors>Gerald Versluis</authors>
+    <owners>Gerald Versluis</owners>
+    <projectUrl>https://github.com/jfversluis/OverheidioApi.Net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A C#/.net wrapper for the Overheid.io API</description>
+    <releaseNotes>Initial version. Should contain all calls for getting Chamber of Commerce (KvK) data.</releaseNotes>
+    <copyright>Copyright Gerald Versluis 2016</copyright>
+    <tags>Overheid.io OpenKvk API</tags>
+	<dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.1" />
+    </dependencies> 
+  </metadata>
+</package>

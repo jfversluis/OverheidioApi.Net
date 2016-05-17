@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverheidioAPI-NET", "OverheidioAPI-NET\OverheidioAPI-NET.csproj", "{DD7C55A3-EE3F-4667-9725-5BD3517A52AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverheidioApi.NET", "OverheidioAPI-NET\OverheidioApi.NET.csproj", "{DD7C55A3-EE3F-4667-9725-5BD3517A52AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
