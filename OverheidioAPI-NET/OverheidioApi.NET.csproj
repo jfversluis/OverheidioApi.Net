@@ -50,6 +50,7 @@
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\OverheidioResponse.cs" />
     <Compile Include="Models\SuggestResult.cs" />
+    <Compile Include="Models\Vehicle.cs" />
     <Compile Include="OverheidioClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

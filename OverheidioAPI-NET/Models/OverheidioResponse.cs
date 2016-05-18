@@ -17,7 +17,11 @@ namespace OverheidioApi.NET.Models
 
     public class Results
     {
+        [JsonProperty("rechtspersoon")]
         public Corporation[] Corporations { get; set; }
+
+        [JsonProperty("kenteken")]
+        public Vehicle[] Vehicles { get; set; }
     }
 
     public class HalLinks
