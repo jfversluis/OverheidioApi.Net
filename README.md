@@ -11,7 +11,7 @@ var _overheidioClient = new OverheidioClient("w98ef7e7w98fds789f9d8s7fd7");
 
 Now you can start getting data.
 
-## Find
+## FindCorporations
 This method provides you with the functionality to perform search operations on the dataset.
 Check out the IntelliSense for the options on limiting your find results.
 
@@ -39,4 +39,25 @@ Provides autocomplete suggestions based on the entered query
 var suggestions = await client.GetSuggestions("Verslu");
 
 Console.WriteLine("Suggestions " + suggestions.Tradenames.Length + " " + suggestions.Streets.Length);
+```
+
+## FindVehicles
+This method provides you with the functionality to perform search operations on the dataset.
+Check out the IntelliSense for the options on limiting your find results.
+
+```
+var resultVehicles = await client.Find();
+
+foreach (var r in resultVehicles.Results.Vehicles)
+{
+    Console.WriteLine(r.Brand);
+}
+```
+
+## GetVehicle
+Gets the details from a specific Vehicle by licenseplate
+
+```
+var oneResult = await client.GetVehicle("4-TFL-24");
+Console.WriteLine(oneResult.Brand);
 ```
