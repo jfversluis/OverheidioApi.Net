@@ -13,7 +13,6 @@ namespace OverheidioApi.NET
     public class OverheidioClient
     {
         private const string ApiBaseUrl = "https://overheid.io/";
-        private readonly string _apiKey;
         private readonly HttpClient _httpClient;
 
         /// <summary>
@@ -25,8 +24,6 @@ namespace OverheidioApi.NET
             if (string.IsNullOrWhiteSpace(apikey))
                 throw new ArgumentException("Parameter apikey needs a value");
 
-            _apiKey = apikey;
-
             _httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(ApiBaseUrl)
@@ -34,12 +31,12 @@ namespace OverheidioApi.NET
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("ovio-api-key", _apiKey);
+            _httpClient.DefaultRequestHeaders.Add("ovio-api-key", apikey);
         }
 
         /// <summary>
         /// Find corporations by specifying searchcriteria. Results will contain Dutch descriptions.
-        /// Returned Corporation objects may not include all property values depending on the <paramref name="fields"/></param> parameter.
+        /// Returned Corporation objects may not include all property values depending on the <paramref name="fields"/> parameter.
         /// </summary>
         /// <param name="size">How many results should be returned, default 100</param>
         /// <param name="page">Which page (if more results are available than specified <paramref name="size"/>) should be retrieved</param>
@@ -54,14 +51,14 @@ namespace OverheidioApi.NET
             string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
         {
             if (size <= 0)
-                throw new ArgumentOutOfRangeException("Parameter size cannot 0 or less");
+                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
             if (page <= 0)
-                throw new ArgumentOutOfRangeException("Parameter page cannot 0 or less");
+                throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
 
             // TODO maybe use an enum?
             if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
-                throw new ArgumentOutOfRangeException("Parameter order can only be asc or desc");
+                throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
 
             var urlBuilder = new StringBuilder($"/api/kvk?size={size}&page={page}&order={order}");
 
@@ -126,13 +123,13 @@ namespace OverheidioApi.NET
         public async Task<SuggestResult> GetSuggestions(string query, int size = 10, string[] fields = null)
         {
             if (size <= 0)
-                throw new ArgumentOutOfRangeException("Parameter size cannot 0 or less");
+                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
             if (size > 25)
-                throw new ArgumentOutOfRangeException("Parameter size cannot be more than 25");
+                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot be more than 25");
 
-            if (fields != null && fields.Except(new[] { "handelsnaam", "straat", "dossiernummer" }).Count() > 0)
-                throw new ArgumentOutOfRangeException("Parameter fields can only contain values: handelsnaam, straat and dossiernummer");
+            if (fields != null && fields.Except(new[] { "handelsnaam", "straat", "dossiernummer" }).Any())
+                throw new ArgumentOutOfRangeException(nameof(fields), "Parameter fields can only contain values: handelsnaam, straat and dossiernummer");
 
             var resultJson = await _httpClient.GetStringAsync($"suggest/kvk/{query}");
 
@@ -150,7 +147,7 @@ namespace OverheidioApi.NET
 
         /// <summary>
         /// Find vehicles by specifying searchcriteria. Results will contains Dutch descriptions.
-        /// Returned Vehicle objects may not include all property values depending on the <paramref name="fields"/></param> parameter.
+        /// Returned Vehicle objects may not include all property values depending on the <paramref name="fields"/> parameter.
         /// </summary>
         /// <param name="size">How many results should be returned, default 100</param>
         /// <param name="page">Which page (if more results are available than specified <paramref name="size"/>) should be retrieved</param>
@@ -165,14 +162,14 @@ namespace OverheidioApi.NET
             string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
         {
             if (size <= 0)
-                throw new ArgumentOutOfRangeException("Parameter size cannot 0 or less");
+                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
             if (page <= 0)
-                throw new ArgumentOutOfRangeException("Parameter page cannot 0 or less");
+                throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
 
             // TODO maybe use an enum?
             if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
-                throw new ArgumentOutOfRangeException("Parameter order can only be asc or desc");
+                throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
 
             var urlBuilder = new StringBuilder($"/api/voertuiggegevens?size={size}&page={page}&order={order}");
 
