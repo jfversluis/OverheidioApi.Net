@@ -131,7 +131,7 @@ namespace OverheidioApi.NET
             if (fields != null && fields.Except(new[] { "handelsnaam", "straat", "dossiernummer" }).Any())
                 throw new ArgumentOutOfRangeException(nameof(fields), "Parameter fields can only contain values: handelsnaam, straat and dossiernummer");
 
-            var resultJson = await _httpClient.GetStringAsync($"suggest/kvk/{query}");
+            var resultJson = await _httpClient.GetStringAsync($"suggest/kvk/{query}?size={size}");
 
             try
             {
