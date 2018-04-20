@@ -15,14 +15,18 @@ namespace OverheidioApi.NET.Models
         public Results Results { get; set; }
     }
 
-    public class Results
-    {
-        [JsonProperty("rechtspersoon")]
+	public class Results
+	{
+		[JsonProperty("bedrijf")]
         public Corporation[] Corporations { get; set; }
 
         [JsonProperty("kenteken")]
         public Vehicle[] Vehicles { get; set; }
-    }
+
+		[JsonProperty("adres")]
+		public Adres[] Adresses { get; set; }
+		
+	}
 
     public class HalLinks
     {
