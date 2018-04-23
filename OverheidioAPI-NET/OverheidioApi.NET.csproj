@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Adres.cs" />
+    <Compile Include="Models\Adress.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Corporation.cs" />
     <Compile Include="Models\Link.cs" />

@@ -10,30 +10,30 @@ using System.Threading.Tasks;
 
 namespace OverheidioApi.NET
 {
-    public class OverheidioClient
-    {
-        private const string ApiBaseUrl = "https://api.overheid.io/";
+	public class OverheidioClient
+	{
+		private const string ApiBaseUrl = "https://api.overheid.io/";
 		private const string ApiBaseUrl2 = "https://overheid.io/";
 		private readonly HttpClient _httpClient;
 
-        /// <summary>
-        /// Instantiates a new OverheidioClient
-        /// </summary>
-        /// <param name="apikey">API key which can be generated on overheid.io</param>
-        public OverheidioClient(string apikey)
-        {
-            if (string.IsNullOrWhiteSpace(apikey))
-                throw new ArgumentException("Parameter apikey needs a value");
+		/// <summary>
+		/// Instantiates a new OverheidioClient
+		/// </summary>
+		/// <param name="apikey">API key which can be generated on overheid.io</param>
+		public OverheidioClient(string apikey)
+		{
+			if (string.IsNullOrWhiteSpace(apikey))
+				throw new ArgumentException("Parameter apikey needs a value");
 
-            _httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(ApiBaseUrl)
-            };
+			_httpClient = new HttpClient()
+			{
+				BaseAddress = new Uri(ApiBaseUrl)
+			};
 
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("ovio-api-key", apikey);
-        }
+			_httpClient.DefaultRequestHeaders.Accept.Clear();
+			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			_httpClient.DefaultRequestHeaders.Add("ovio-api-key", apikey);
+		}
 
 		#region kvk
 		/// <summary>
@@ -50,42 +50,42 @@ namespace OverheidioApi.NET
 		/// <param name="filters">Used for specifying filters. Key is the field, value is the value to filter on. I.e. key: postcode, value: 3083cz. See following link for all possible fields <see href="https://overheid.io/documentatie/kvk#show"/></param>
 		/// <returns>List of results found including JSON+HAL metadata</returns>
 		public async Task<OverheidioResponse> FindCorporations(int size = 100, int page = 1, string order = "desc", string sort = "", string query = "",
-            string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
-        {
-            if (size <= 0)
-                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
+			string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
+		{
+			if (size <= 0)
+				throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
-            if (page <= 0)
-                throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
+			if (page <= 0)
+				throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
 
-            // TODO maybe use an enum?
-            if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
-                throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
+			// TODO maybe use an enum?
+			if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
+				throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
 
-            var urlBuilder = new StringBuilder($"/openkvk?size={size}&page={page}&order={order}");
+			var urlBuilder = new StringBuilder($"/openkvk?size={size}&page={page}&order={order}");
 
-            if (!string.IsNullOrWhiteSpace(sort))
-                urlBuilder.Append($"&sort={sort}");
+			if (!string.IsNullOrWhiteSpace(sort))
+				urlBuilder.Append($"&sort={sort}");
 
-            if (!string.IsNullOrWhiteSpace(query))
-                urlBuilder.Append($"&query={query}");
+			if (!string.IsNullOrWhiteSpace(query))
+				urlBuilder.Append($"&query={query}");
 
-            if (queryfields != null && queryfields.Length > 0)
-                foreach (string field in queryfields)
-                    urlBuilder.Append($"&queryfields[]={field}");
+			if (queryfields != null && queryfields.Length > 0)
+				foreach (string field in queryfields)
+					urlBuilder.Append($"&queryfields[]={field}");
 
-            if (fields != null && fields.Length > 0)
-                foreach (var field in fields)
-                    urlBuilder.Append($"&fields[]={field}");
+			if (fields != null && fields.Length > 0)
+				foreach (var field in fields)
+					urlBuilder.Append($"&fields[]={field}");
 
-            if (filters != null && filters.Length > 0)
-                foreach (KeyValuePair<string, string> filter in filters)
-                    urlBuilder.Append($"&filters[{filter.Key}]={filter.Value}");
+			if (filters != null && filters.Length > 0)
+				foreach (KeyValuePair<string, string> filter in filters)
+					urlBuilder.Append($"&filters[{filter.Key}]={filter.Value}");
 
-            var jsonResult = await _httpClient.GetStringAsync(urlBuilder.ToString());
+			var jsonResult = await _httpClient.GetStringAsync(urlBuilder.ToString());
 
-            return JsonConvert.DeserializeObject<OverheidioResponse>(jsonResult);
-        }
+			return JsonConvert.DeserializeObject<OverheidioResponse>(jsonResult);
+		}
 
 		/// <summary>
 		/// Get a data about a specific corporation by dossier- and subdossiernumber
@@ -149,29 +149,29 @@ namespace OverheidioApi.NET
 		/// <param name="fields">Which fields to include in the suggestion. Can only be handelsnaam (tradename), straat (street) and dossiernummer (dossiernumber)</param>
 		/// <returns>List of suggestions found with the given <paramref name="query"/> or null if an error occurs</returns>
 		public async Task<SuggestResult> GetSuggestions(string query, int size = 10, string[] fields = null)
-        {
-            if (size <= 0)
-                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
+		{
+			if (size <= 0)
+				throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
-            if (size > 25)
-                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot be more than 25");
+			if (size > 25)
+				throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot be more than 25");
 
-            if (fields != null && fields.Except(new[] { "handelsnaam", "straat", "dossiernummer" }).Any())
-                throw new ArgumentOutOfRangeException(nameof(fields), "Parameter fields can only contain values: handelsnaam, straat and dossiernummer");
+			if (fields != null && fields.Except(new[] { "handelsnaam", "straat", "dossiernummer" }).Any())
+				throw new ArgumentOutOfRangeException(nameof(fields), "Parameter fields can only contain values: handelsnaam, straat and dossiernummer");
 
-            var resultJson = await _httpClient.GetStringAsync($"suggest/kvk/{query}?size={size}");
+			var resultJson = await _httpClient.GetStringAsync($"suggest/kvk/{query}?size={size}");
 
-            try
-            {
-                var resultSuggestions = JsonConvert.DeserializeObject<SuggestResult>(resultJson);
+			try
+			{
+				var resultSuggestions = JsonConvert.DeserializeObject<SuggestResult>(resultJson);
 
-                return resultSuggestions;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+				return resultSuggestions;
+			}
+			catch
+			{
+				return null;
+			}
+		}
 		#endregion
 
 		#region Vehicleinfo
@@ -189,46 +189,46 @@ namespace OverheidioApi.NET
 		/// <param name="filters">Used for specifying filters. Key is the field, value is the value to filter on. I.e. key: kenteken, value: 02-JZX-1. See following link for all possible fields <see href="https://overheid.io/documentatie/voertuiggegevens#show"/></param>
 		/// <returns>List of results found including JSON+HAL metadata</returns>
 		public async Task<OverheidioResponse> FindVehicles(int size = 100, int page = 1, string order = "desc", string sort = "", string query = "",
-            string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
-        {
-            if (size <= 0)
-                throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
+			string[] queryfields = null, string[] fields = null, KeyValuePair<string, string>[] filters = null)
+		{
+			if (size <= 0)
+				throw new ArgumentOutOfRangeException(nameof(size), "Parameter size cannot 0 or less");
 
-            if (page <= 0)
-                throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
+			if (page <= 0)
+				throw new ArgumentOutOfRangeException(nameof(page), "Parameter page cannot 0 or less");
 
-            // TODO maybe use an enum?
-            if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
-                throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
+			// TODO maybe use an enum?
+			if (order.ToLowerInvariant() != "desc" && order.ToLowerInvariant() != "asc")
+				throw new ArgumentOutOfRangeException(nameof(order), "Parameter order can only be asc or desc");
 
 			_httpClient.BaseAddress = new Uri(ApiBaseUrl2);
 
 			var urlBuilder = new StringBuilder($"/api/voertuiggegevens?size={size}&page={page}&order={order}");
 
-            if (!string.IsNullOrWhiteSpace(sort))
-                urlBuilder.Append($"&sort={sort}");
+			if (!string.IsNullOrWhiteSpace(sort))
+				urlBuilder.Append($"&sort={sort}");
 
-            if (!string.IsNullOrWhiteSpace(query))
-                urlBuilder.Append($"&query={query}");
+			if (!string.IsNullOrWhiteSpace(query))
+				urlBuilder.Append($"&query={query}");
 
-            if (queryfields != null && queryfields.Length > 0)
-                foreach (var field in queryfields)
-                    urlBuilder.Append($"&queryfields[]={field}");
+			if (queryfields != null && queryfields.Length > 0)
+				foreach (var field in queryfields)
+					urlBuilder.Append($"&queryfields[]={field}");
 
-            if (fields != null && fields.Length > 0)
-                foreach (var field in fields)
-                    urlBuilder.Append($"&fields[]={field}");
+			if (fields != null && fields.Length > 0)
+				foreach (var field in fields)
+					urlBuilder.Append($"&fields[]={field}");
 
-            if (filters != null && filters.Length > 0)
-                foreach (var filter in filters)
-                    urlBuilder.Append($"&filters[{filter.Key}]={filter.Value}");
-			
-            var jsonResult = await _httpClient.GetStringAsync(urlBuilder.ToString());
+			if (filters != null && filters.Length > 0)
+				foreach (var filter in filters)
+					urlBuilder.Append($"&filters[{filter.Key}]={filter.Value}");
 
-            return JsonConvert.DeserializeObject<OverheidioResponse>(jsonResult);
-        }
+			var jsonResult = await _httpClient.GetStringAsync(urlBuilder.ToString());
 
-		[Obsolete ("fixed typo GetVerhicle")]
+			return JsonConvert.DeserializeObject<OverheidioResponse>(jsonResult);
+		}
+
+		[Obsolete("fixed typo GetVerhicle")]
 		public async Task<Vehicle> GetVerhicle(string licensePlate)
 		{
 			return await GetVehicle(licensePlate);
@@ -239,15 +239,15 @@ namespace OverheidioApi.NET
 		/// <param name="licensePlate">The licenseplate in Dutch formatting i.e. 02-JZX-1</param>
 		/// <returns>A Vehicle object containing the details</returns>
 		public async Task<Vehicle> GetVehicle(string licensePlate)
-        {
+		{
 			_httpClient.BaseAddress = new Uri(ApiBaseUrl2);
 
 			var resultJson = await _httpClient.GetStringAsync($"api/voertuiggegevens/{licensePlate}");
 
-            var vehicleResult = JsonConvert.DeserializeObject<Vehicle>(resultJson);
+			var vehicleResult = JsonConvert.DeserializeObject<Vehicle>(resultJson);
 
-            return vehicleResult;
-        }
+			return vehicleResult;
+		}
 		#endregion
 
 		#region BAG
