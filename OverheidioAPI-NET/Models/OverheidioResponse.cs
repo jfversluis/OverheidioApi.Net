@@ -24,7 +24,7 @@ namespace OverheidioApi.NET.Models
 		public Vehicle[] Vehicles { get; set; }
 
 		[JsonProperty("adres")]
-		public Adress[] Adresses { get; set; }
+		public Address[] Adresses { get; set; }
 
 	}
 

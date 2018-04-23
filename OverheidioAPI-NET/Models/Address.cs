@@ -2,7 +2,7 @@
 
 namespace OverheidioApi.NET.Models
 {
-	public class Adress
+	public class Address
 	{
 		[JsonProperty("gemeentenaam")]
 		public string Municipality { get; set; }
