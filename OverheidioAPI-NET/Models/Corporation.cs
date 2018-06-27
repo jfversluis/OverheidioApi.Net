@@ -33,7 +33,7 @@ namespace OverheidioApi.NET.Models
 		public HalLinks Links { get; set; }
 
 		[JsonProperty("actief")]
-		public bool Active { get; set; }
+		public bool? Active { get; set; }
 
 		[JsonProperty("bestaandehandelsnaam")]
 		public IList<string> ExistingTradename { get; set; }
